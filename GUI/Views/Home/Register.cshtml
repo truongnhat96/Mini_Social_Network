@@ -1,0 +1,30 @@
+﻿@model AccountModel
+@{
+    ViewData["Title"] = "Register Page";
+}
+<div class="text-center">
+    <h1 class="display-4">Register Account</h1>
+</div>
+
+<div class="container">
+    <div class="row justify-content-center">
+        <div class="col-md-6">
+            <form asp-action="Register" method="post">
+                <div class="form-group">
+                    <label for="username">Username</label>
+                    <input type="text" class="form-control" name="Username" value="@Model?.Username" placeholder="Enter your username" required>
+                </div>
+                <div class="form-group">
+                    <label for="password">Password</label>
+                    <input type="password" class="form-control" name="Password" value="@Model?.Password" placeholder="Enter your password" required>
+                </div>
+                <div class="form-group">
+                    <label for="fullname">Fullname</label>
+                    <input type="text" class="form-control" name="DisplayName" value="@Model?.DisplayName" placeholder="Enter your fullname" required>
+                </div>
+                <br />
+                <button type="submit" class="btn btn-primary">Register</button>
+            </form>
+        </div>
+    </div>
+</div>

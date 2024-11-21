@@ -1,0 +1,18 @@
+﻿@model AccountList
+@{
+    ViewData["Title"] = "View Accounts";
+}
+
+<h1>People who you can know</h1>
+<br/>
+<div>
+        @foreach (var account in Model.Accounts)
+        {
+            <div class="bg-light">
+                <h2>Name: @account.DisplayName</h2>
+            <h4>UID: @account.Username</h4>
+            <a href="/home/addfriend" class="btn btn-primary">Add Friend</a>
+            </div>
+            <br/> <br/>
+        }
+</div>
