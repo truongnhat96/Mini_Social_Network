@@ -3,6 +3,7 @@ using Infrastructure;
 using Infrastructure.DataContext;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.DependencyInjection;
+using Moq;
 using UseCases;
 
 namespace WebTest
@@ -13,26 +14,66 @@ namespace WebTest
         public void TestAdd()
         {
             // Arrange
-            SocialNetworkContext context = new("Server=.\\SQLEXPRESS;Database=Mini_Social_Network;Trusted_Connection=True;TrustServerCertificate=True");
-
-            IAccountRepository accountRepository = new AccountRepository(context);    
-
-            var account = new Account()
-            {
-                Username = "test1",
-                Password = "test",
-                DisplayName = "test"
-            };
+            var friendRepositoryMock = new Mock<IFriendRepository>();
+            var friendManager = new FriendManager(friendRepositoryMock.Object);
+            var friend = new Friend { FullName = "John Doe" };
 
             // Act
-            accountRepository.Add(account);
+            friendManager.AddFriend(friend);
 
             // Assert
-            var savedAccount = accountRepository.GetAccountByUsername("test");
-            Assert.NotNull(savedAccount);
-            Assert.Equal("test", savedAccount.Username);
-            Assert.Equal("test", savedAccount.Password);
-            Assert.Equal("test", savedAccount.DisplayName);
+            friendRepositoryMock.Verify(repo => repo.Add(friend), Times.Once);
+        }
+
+        [Fact]
+        public void TestRemove()
+        {
+            // Arrange
+            var friendRepositoryMock = new Mock<IFriendRepository>();
+            var friendManager = new FriendManager(friendRepositoryMock.Object);
+            var friend = new Friend { FullName = "John Doe" };
+
+            // Act
+            friendManager.RemoveFriend(friend);
+
+            // Assert
+            friendRepositoryMock.Verify(repo => repo.Delete(friend), Times.Once);
+        }
+
+        [Fact]
+        public void TestGetAllFriends()
+        {
+            // Arrange
+            var friendRepositoryMock = new Mock<IFriendRepository>();
+            var friendManager = new FriendManager(friendRepositoryMock.Object);
+            var friends = new List<Friend>
+                {
+                    new Friend { FullName = "John Doe" },
+                    new Friend { FullName = "Jane Smith" }
+                };
+            friendRepositoryMock.Setup(repo => repo.GetAllFriends()).Returns(friends);
+
+            // Act
+            var result = friendManager.GetAllFriends();
+
+            // Assert
+            Assert.Equal(friends, result);
+        }
+
+        [Fact]
+        public void TestGetFriendByFullName()
+        {
+            // Arrange
+            var friendRepositoryMock = new Mock<IFriendRepository>();
+            var friendManager = new FriendManager(friendRepositoryMock.Object);
+            var friend = new Friend { FullName = "John Doe" };
+            friendRepositoryMock.Setup(repo => repo.GetFriendByFullName("John Doe")).Returns(friend);
+
+            // Act
+            var result = friendManager.GetFriendByFullName("John Doe");
+
+            // Assert
+            Assert.Equal(friend, result);
         }
     }
 

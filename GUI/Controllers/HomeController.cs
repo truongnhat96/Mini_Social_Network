@@ -33,6 +33,7 @@ namespace GUI.Controllers
             _logger.LogInformation("Password = {pw}", account.Password);
             if (_accountManager.LoginValidation(account.Username, account.Password))
             {
+                TempData["DisplayName"] = _accountManager.GetAccountByUsername(account.Username).DisplayName;
                 return RedirectToAction("Index", "DashBoard");
             }
             return RedirectToAction("Invalid");
