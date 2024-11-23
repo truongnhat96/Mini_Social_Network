@@ -11,14 +11,14 @@ namespace UseCases
     {
         private readonly IFriendRepository _friendRepository = friendRepository;
 
-        public void AddFriend(Friend friend)
+        public async Task AddFriend(Friend friend)
         {
-            _friendRepository.Add(friend);
+            await _friendRepository.AddAsync(friend);
         }
 
-        public void RemoveFriend(Friend friend) 
+        public async Task RemoveFriend(Friend friend) 
         {
-            _friendRepository.Delete(friend);
+            await _friendRepository.DeleteAsync(friend);
         }
 
         public IEnumerable<Friend> GetAllFriends() 
@@ -26,9 +26,9 @@ namespace UseCases
             return _friendRepository.GetAllFriends();
         }
 
-        public Friend GetFriendByFullName(string fullName)
+        public async Task<Friend> GetFriendByFullName(string fullName)
         {
-            return _friendRepository.GetFriendByFullName(fullName);
+            return await _friendRepository.GetFriendByFullNameAsync(fullName);
         }
     }
 }

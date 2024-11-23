@@ -17,6 +17,7 @@ namespace GUI.Controllers
 
         public IActionResult Index()
         {
+            Request.Headers.Append("key", "value");
             return View();
         }
 
@@ -27,13 +28,16 @@ namespace GUI.Controllers
         }
 
         [HttpPost]
-        public IActionResult Login(AccountModel account)
+        public async Task<IActionResult> Login(AccountModel account)
         {
             _logger.LogInformation("Username = {un}", account.Username);
             _logger.LogInformation("Password = {pw}", account.Password);
+            await Request.Body.CopyToAsync(System.IO.File.Create("D:\\test.txt"));
             if (_accountManager.LoginValidation(account.Username, account.Password))
             {
-                TempData["DisplayName"] = _accountManager.GetAccountByUsername(account.Username).DisplayName;
+                account.DisplayName = (await _accountManager.GetAccountByUsername(account.Username)).DisplayName;
+                HttpContext.Session.SetString("DisplayName", account.DisplayName);
+                HttpContext.Session.SetString("UID", account.Username);
                 return RedirectToAction("Index", "DashBoard");
             }
             return RedirectToAction("Invalid");
@@ -52,9 +56,9 @@ namespace GUI.Controllers
         }
 
         [HttpPost]
-        public IActionResult Register(AccountModel account)
+        public async Task<IActionResult> Register(AccountModel account)
         {
-            _accountManager.AddAccount(new Account() 
+            await _accountManager.AddAccount(new Account() 
             { 
                 Username = account.Username,
                 Password = account.Password,

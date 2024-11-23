@@ -7,11 +7,10 @@ namespace GUI.Controllers
     {
         public IActionResult Index()
         {
-           if(TempData["DisplayName"] == null)
+            if (HttpContext.Session.GetString("DisplayName") == null)
             {
                 return RedirectToAction("Login", "Home");
             }
-           ViewBag.DisplayName = TempData["DisplayName"];
             return View();
         }
 

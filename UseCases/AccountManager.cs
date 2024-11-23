@@ -6,14 +6,14 @@ namespace UseCases
     {
         private readonly IAccountRepository _accountRepository = accountRepository;
 
-        public void AddAccount(Account account)
+        public async Task AddAccount(Account account)
         {
-            _accountRepository.Add(account);
+            await _accountRepository.AddAsync(account);
         }
 
-        public void RemoveAccount(Account account) 
+        public async Task RemoveAccount(Account account) 
         {
-            _accountRepository.Delete(account);
+            await _accountRepository.DeleteAsync(account);
         }
 
         public bool LoginValidation(string username, string password)
@@ -26,9 +26,9 @@ namespace UseCases
             return _accountRepository.GetAllAccounts();
         }
 
-        public Account GetAccountByUsername(string username)
+        public async Task<Account> GetAccountByUsername(string username)
         {
-            return _accountRepository.GetAccountByUsername(username);
+            return await _accountRepository.GetAccountByUsernameAsync(username);
         }
     }
 }

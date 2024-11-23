@@ -4,9 +4,9 @@ namespace UseCases
 {
     public interface IFriendRepository
     {
-        void Add(Friend friend);
-        void Delete(Friend friend);
-        Friend GetFriendByFullName(string fullName);
+        Task AddAsync(Friend friend);
+        Task DeleteAsync(Friend friend);
+        Task<Friend> GetFriendByFullNameAsync(string fullName);
         IEnumerable<Friend> GetAllFriends();
     }
 }

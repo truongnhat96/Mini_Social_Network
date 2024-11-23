@@ -8,15 +8,15 @@ namespace Infrastructure
     {
         private readonly SocialNetworkContext _context = context;
 
-        public void Add(Account account)
+        public async Task AddAsync(Account account)
         {
-            _context.Accounts.Add(new Accounts() 
+            await _context.Accounts.AddAsync(new Accounts() 
             { 
                 Username = account.Username, 
                 Password = account.Password, 
                 DisplayName = account.DisplayName
             });
-            _context.SaveChanges();
+            await _context.SaveChangesAsync();
         }
 
         public bool CheckAccountLogin(string username, string password)
@@ -27,7 +27,7 @@ namespace Infrastructure
             return query.Any();
         }
 
-        public void Delete(Account account)
+        public async Task DeleteAsync(Account account)
         {
             _context.Accounts.Remove(new Accounts()
             {
@@ -35,12 +35,12 @@ namespace Infrastructure
                 Password = account.Password,
                 DisplayName = account.DisplayName
             });
-            _context.SaveChanges();
+            await _context.SaveChangesAsync();
         }
 
-        public Account GetAccountByUsername(string username)
+        public async Task<Account> GetAccountByUsernameAsync(string username)
         {
-           var acc = _context.Accounts.FirstOrDefault(a => a.Username == username) ?? new Accounts() { Username = "Unknow", DisplayName = "", Password = "???"};
+            var acc = await _context.Accounts.FindAsync(username) ?? new Accounts() { DisplayName = "", Password = "", Username = ""};
             return new Account()
             {
                 Username = acc.Username,
@@ -64,7 +64,7 @@ namespace Infrastructure
             return accounts;
         }
 
-        public void Update(Account account)
+        public async Task UpdateAsync(Account account)
         {
             _context.Accounts.Update(new Accounts()
             {
@@ -72,7 +72,7 @@ namespace Infrastructure
                 Password = account.Password,
                 DisplayName = account.DisplayName
             });
-            _context.SaveChanges();
+            await _context.SaveChangesAsync();
         }
     }
 }

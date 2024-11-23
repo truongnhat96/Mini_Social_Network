@@ -13,24 +13,24 @@ namespace Infrastructure
     {
         private readonly SocialNetworkContext _context = context;
 
-        public void Add(Friend friend)
+        public async Task AddAsync(Friend friend)
         {
-            _context.Friends.Add(new Friends()
+            await _context.Friends.AddAsync(new Friends()
             {
                 FullName = friend.FullName,
                 Status = friend.Status
             });
-            _context.SaveChanges();
+            await _context.SaveChangesAsync();
         }
 
-        public void Delete(Friend friend)
+        public async Task DeleteAsync(Friend friend)
         {
             _context.Friends.Remove(new Friends()
             {
                 FullName = friend.FullName,
                 Status = friend.Status
             });
-            _context.SaveChanges();
+            await _context.SaveChangesAsync();
         }
 
         public IEnumerable<Friend> GetAllFriends()
@@ -47,9 +47,9 @@ namespace Infrastructure
             return friends;
         }
 
-        public Friend GetFriendByFullName(string fullName)
+        public async Task<Friend> GetFriendByFullNameAsync(string fullName)
         {
-            var friend = _context.Friends.FirstOrDefault(fr => fr.FullName == fullName) ?? new Friends() { FullName = "Unknow", Status = "???" };
+            var friend = await _context.Friends.FindAsync() ?? new Friends() { FullName = "Unknow", Status = "???" };
             return new Friend()
             {
                 FullName = friend.FullName,
