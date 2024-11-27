@@ -11,8 +11,8 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace Infrastructure.Migrations
 {
     [DbContext(typeof(SocialNetworkContext))]
-    [Migration("20241120055908_InitialWeb")]
-    partial class InitialWeb
+    [Migration("20241127073407_InitWebDb")]
+    partial class InitWebDb
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -20,6 +20,9 @@ namespace Infrastructure.Migrations
 #pragma warning disable 612, 618
             modelBuilder
                 .HasAnnotation("ProductVersion", "9.0.0")
+                .HasAnnotation("Proxies:ChangeTracking", false)
+                .HasAnnotation("Proxies:CheckEquality", false)
+                .HasAnnotation("Proxies:LazyLoading", true)
                 .HasAnnotation("Relational:MaxIdentifierLength", 128);
 
             SqlServerModelBuilderExtensions.UseIdentityColumns(modelBuilder);
@@ -51,7 +54,9 @@ namespace Infrastructure.Migrations
                         .HasMaxLength(200)
                         .HasColumnType("nvarchar(200)");
 
-                    b.Property<string>("AccountUsername")
+                    b.Property<string>("AccountID")
+                        .IsRequired()
+                        .HasMaxLength(100)
                         .HasColumnType("nvarchar(100)");
 
                     b.Property<string>("Status")
@@ -61,7 +66,7 @@ namespace Infrastructure.Migrations
 
                     b.HasKey("FullName");
 
-                    b.HasIndex("AccountUsername");
+                    b.HasIndex("AccountID");
 
                     b.ToTable("Friend");
                 });
@@ -70,7 +75,9 @@ namespace Infrastructure.Migrations
                 {
                     b.HasOne("Infrastructure.DataContext.Accounts", "Account")
                         .WithMany("Friends")
-                        .HasForeignKey("AccountUsername");
+                        .HasForeignKey("AccountID")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
 
                     b.Navigation("Account");
                 });

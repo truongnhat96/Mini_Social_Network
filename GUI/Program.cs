@@ -11,14 +11,16 @@ namespace GUI
             // Add services to the container.
             builder.Services.AddControllersWithViews();
 
+            builder.Services.AddDbContext<SocialNetworkContext>(options =>
+                    options.UseSqlServer(builder.Configuration.GetConnectionString("DefaultConnection"))
+                    .UseLazyLoadingProxies());
+
             builder.Services.AddScoped<IFriendRepository>(service => new FriendRepository(service.GetRequiredService<SocialNetworkContext>()));
             builder.Services.AddScoped<IAccountRepository>(service => new AccountRepository(service.GetRequiredService<SocialNetworkContext>()));
             builder.Services.AddTransient(service => new FriendManager(service.GetRequiredService<IFriendRepository>()));
             builder.Services.AddTransient(service => new AccountManager(service.GetRequiredService<IAccountRepository>()));
 
-            builder.Services.AddDbContext<SocialNetworkContext>(options =>
-                    options.UseSqlServer(builder.Configuration.GetConnectionString("DefaultConnection")));
-
+          
             // Add session services
             builder.Services.AddDistributedMemoryCache();
             builder.Services.AddSession(options =>

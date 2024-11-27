@@ -4,9 +4,11 @@ namespace UseCases
 {
     public interface IFriendRepository
     {
-        Task AddAsync(Friend friend);
-        Task DeleteAsync(Friend friend);
+        IUnitOfWork UnitOfWork { get; }
+        Task<Friend> AddAsync(Friend friend);
+        Friend Delete(Friend friend);
         Task<Friend> GetFriendByFullNameAsync(string fullName);
-        IEnumerable<Friend> GetAllFriends();
+        IEnumerable<Friend> GetAllFriendsOfUser();
+        IEnumerable<Friend> GetAllFriendsOfUser(string UID);
     }
 }

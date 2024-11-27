@@ -11,9 +11,9 @@ namespace UseCases
             await _accountRepository.AddAsync(account);
         }
 
-        public async Task RemoveAccount(Account account) 
+        public void RemoveAccount(Account account) 
         {
-            await _accountRepository.DeleteAsync(account);
+            _accountRepository.Delete(account);
         }
 
         public bool LoginValidation(string username, string password)
@@ -29,6 +29,17 @@ namespace UseCases
         public async Task<Account> GetAccountByUsername(string username)
         {
             return await _accountRepository.GetAccountByUsernameAsync(username);
+        }
+
+        public void UpdateAccount(Account account)
+        {
+            _accountRepository.Update(account);
+        }
+
+        public async Task<bool> Commit()
+        {
+            await _accountRepository.UnitOfWork.SaveChangeAsync();
+            return true;
         }
     }
 }

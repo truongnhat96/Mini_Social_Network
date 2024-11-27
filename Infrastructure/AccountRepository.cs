@@ -7,8 +7,10 @@ namespace Infrastructure
     public class AccountRepository(SocialNetworkContext context) : IAccountRepository
     {
         private readonly SocialNetworkContext _context = context;
+        
+        public IUnitOfWork UnitOfWork => _context;
 
-        public async Task AddAsync(Account account)
+        public async Task<Account> AddAsync(Account account)
         {
             await _context.Accounts.AddAsync(new Accounts() 
             { 
@@ -16,7 +18,7 @@ namespace Infrastructure
                 Password = account.Password, 
                 DisplayName = account.DisplayName
             });
-            await _context.SaveChangesAsync();
+            return account;
         }
 
         public bool CheckAccountLogin(string username, string password)
@@ -27,15 +29,16 @@ namespace Infrastructure
             return query.Any();
         }
 
-        public async Task DeleteAsync(Account account)
+        public Account Delete(Account account)
         {
-            _context.Accounts.Remove(new Accounts()
+            var acc = new Accounts()
             {
                 Username = account.Username,
                 Password = account.Password,
                 DisplayName = account.DisplayName
-            });
-            await _context.SaveChangesAsync();
+            };
+            _context.Remove(acc);
+            return account;
         }
 
         public async Task<Account> GetAccountByUsernameAsync(string username)
@@ -64,7 +67,7 @@ namespace Infrastructure
             return accounts;
         }
 
-        public async Task UpdateAsync(Account account)
+        public Account Update(Account account)
         {
             _context.Accounts.Update(new Accounts()
             {
@@ -72,7 +75,7 @@ namespace Infrastructure
                 Password = account.Password,
                 DisplayName = account.DisplayName
             });
-            await _context.SaveChangesAsync();
+            return account;
         }
     }
 }

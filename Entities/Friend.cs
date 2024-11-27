@@ -10,5 +10,6 @@ namespace Entities
     {
         public required string FullName { get; set; }
         public string Status { get; set; } = "None";
+        public required string AccountID { get; set; }
     }
 }

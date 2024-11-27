@@ -4,9 +4,10 @@ namespace UseCases
 {
     public interface IAccountRepository
     {
-        Task AddAsync(Account account);
-        Task DeleteAsync(Account account);
-        Task UpdateAsync(Account account);
+        IUnitOfWork UnitOfWork { get; }
+        Task<Account> AddAsync(Account account);
+        Account Delete(Account account);
+        Account Update(Account account);
         Task<Account> GetAccountByUsernameAsync(string username);
         IEnumerable<Account> GetAllAccounts();
 

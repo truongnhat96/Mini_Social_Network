@@ -64,6 +64,7 @@ namespace GUI.Controllers
                 Password = account.Password,
                 DisplayName = account.DisplayName
             });
+            await _accountManager.Commit();
             return RedirectToAction("Successful");
         }
 

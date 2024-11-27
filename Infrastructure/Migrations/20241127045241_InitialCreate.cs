@@ -5,7 +5,7 @@
 namespace Infrastructure.Migrations
 {
     /// <inheritdoc />
-    public partial class InitialWeb : Migration
+    public partial class InitialCreate : Migration
     {
         /// <inheritdoc />
         protected override void Up(MigrationBuilder migrationBuilder)
@@ -29,22 +29,23 @@ namespace Infrastructure.Migrations
                 {
                     FullName = table.Column<string>(type: "nvarchar(200)", maxLength: 200, nullable: false),
                     Status = table.Column<string>(type: "nvarchar(10)", maxLength: 10, nullable: false),
-                    AccountUsername = table.Column<string>(type: "nvarchar(100)", nullable: true)
+                    AccountID = table.Column<string>(type: "nvarchar(100)", maxLength: 100, nullable: false)
                 },
                 constraints: table =>
                 {
                     table.PrimaryKey("PK_Friend", x => x.FullName);
                     table.ForeignKey(
-                        name: "FK_Friend_Account_AccountUsername",
-                        column: x => x.AccountUsername,
+                        name: "FK_Friend_Account_AccountID",
+                        column: x => x.AccountID,
                         principalTable: "Account",
-                        principalColumn: "Username");
+                        principalColumn: "Username",
+                        onDelete: ReferentialAction.Cascade);
                 });
 
             migrationBuilder.CreateIndex(
-                name: "IX_Friend_AccountUsername",
+                name: "IX_Friend_AccountID",
                 table: "Friend",
-                column: "AccountUsername");
+                column: "AccountID");
         }
 
         /// <inheritdoc />

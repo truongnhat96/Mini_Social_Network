@@ -16,19 +16,30 @@ namespace UseCases
             await _friendRepository.AddAsync(friend);
         }
 
-        public async Task RemoveFriend(Friend friend) 
+        public void RemoveFriend(Friend friend)
         {
-            await _friendRepository.DeleteAsync(friend);
+            _friendRepository.Delete(friend);
         }
 
-        public IEnumerable<Friend> GetAllFriends() 
+        public IEnumerable<Friend> GetAllFriendsOfUser()
         {
-            return _friendRepository.GetAllFriends();
+            return _friendRepository.GetAllFriendsOfUser();
+        }
+
+        public IEnumerable<Friend> GetAllFriendsOfUser(string username)
+        {
+            return _friendRepository.GetAllFriendsOfUser(username);
         }
 
         public async Task<Friend> GetFriendByFullName(string fullName)
         {
             return await _friendRepository.GetFriendByFullNameAsync(fullName);
+        }
+
+        public async Task<bool> Commit()
+        {
+            await _friendRepository.UnitOfWork.SaveChangeAsync();
+            return true;
         }
     }
 }

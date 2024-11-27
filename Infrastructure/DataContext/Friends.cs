@@ -17,6 +17,11 @@ namespace Infrastructure.DataContext
         [StringLength(10)]
         public string Status { get; set; } = "None";
 
+        
+        [StringLength(100)]
+        public required string AccountID { get; set; }
+
+        [ForeignKey("AccountID")]
         public virtual Accounts? Account { get; set; }
     }
 }
